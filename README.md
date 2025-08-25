@@ -64,3 +64,7 @@ If sensitive data is detected, the pipeline can be configured to fail the build 
 Run the following command to install Git Secrets:  
 ```bash
 sudo make install   # For Linux and macOS
+For Windows:
+
+Run the provided `install.ps1` PowerShell script.
+This will copy the files to `%USERPROFILE%/.git-secrets` by default and add the directory to the PATH.
