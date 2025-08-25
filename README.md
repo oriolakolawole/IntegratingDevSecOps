@@ -195,6 +195,8 @@ sudo ufw allow 8080
 ```
 By default Jenkins runs on port 8080.
 
+---
+
 ### How to Create a Pipeline in Jenkins with GitHub Integration  
 
 **1. Install Necessary Plugins**  
@@ -229,4 +231,193 @@ If your repository is private:
   - Fetch code from GitHub  
   - Run the defined pipeline steps
   
+---
+
+## SonarQube Setup Guide
+
+SonarQube can be used to automatically scan code as part of a continuous integration or continuous delivery pipeline, ensuring that code quality issues are detected and addressed early in the development process.
+
+It provides a **web-based dashboard** that displays code quality metrics, issues, and trends over time.  
+
+---
+
+### 🚀 How to Install SonarQube on a Server
+
+**1. Install OpenJDK**  
+> SonarQube v9.9 LTS requires **Java 17 runtime**.
+
+```bash
+# SSH to your Ubuntu server as a non-root user with sudo access
+sudo apt-get install openjdk-11-jdk -y     # For older versions
+sudo apt install openjdk-17-jdk -y         # For v9.9+
+```
+
+**2. Install and Configure PostgreSQL**
+
+Add the PostgreSQL repository:
+```bash
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+```
+
+Add the PostgreSQL signing key:
+```bash
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+```
+
+Install PostgreSQL:
+```bash
+sudo apt install postgresql postgresql-contrib -y
+```
+
+Enable and start PostgreSQL:
+```bash
+sudo systemctl enable postgresql
+sudo systemctl start postgresql
+```
+
+Change default PostgreSQL password:
+```bash
+sudo passwd postgres
+```
+
+Switch to postgres user:
+```bash
+su - postgres
+```
+
+Create SonarQube user:
+```bash
+createuser sonar
+```
+
+Log into PostgreSQL:
+```bash
+psql
+```
+
+Set password and database:
+```bash
+ALTER USER sonar WITH ENCRYPTED password 'my_strong_password';
+CREATE DATABASE sonarqube OWNER sonar;
+GRANT ALL PRIVILEGES ON DATABASE sonarqube TO sonar;
+\q
+```
+
+Return to non-root sudo user:
+
+exit
+
+**3. Download and Install SonarQube**
+
+Install zip utility:
+```bash
+sudo apt-get install zip -y
+```
+
+Download SonarQube (replace `<VERSION_NUMBER>`):
+```bash
+sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-<VERSION_NUMBER>.zip
+```
+
+Unzip and move files:
+```bash
+sudo unzip sonarqube-<VERSION_NUMBER>.zip
+sudo mv sonarqube-<VERSION_NUMBER> /opt/sonarqube
+```
+
+**4. Add SonarQube User & Permissions**
+```bash
+sudo groupadd sonar
+sudo useradd -d /opt/sonarqube -g sonar sonar
+sudo chown sonar:sonar /opt/sonarqube -R
+```
+
+**5. Configure SonarQube**
+
+Edit configuration file:
+```bash
+sudo nano /opt/sonarqube/conf/sonar.properties
+```
+
+Update DB credentials:
+```bash
+sonar.jdbc.username=sonar
+sonar.jdbc.password=my_strong_password
+sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+```
+
+Edit sonar.sh file:
+```bash
+sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh
+```
+
+Find and update:
+```bash
+RUN_AS_USER=sonar
+```
+**6. Setup Systemd Service**
+
+Create service file:
+```bash
+sudo nano /etc/systemd/system/sonar.service
+```
+
+Paste configuration:
+```bash
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+User=sonar
+Group=sonar
+Restart=always
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start service:
+```bash
+sudo systemctl enable sonar
+sudo systemctl start sonar
+sudo systemctl status sonar
+```
+
+**7. Modify Kernel System Limits**
+```bash
+sudo nano /etc/sysctl.conf
+```
+
+Add:
+```bash
+vm.max_map_count=262144
+fs.file-max=65536
+ulimit -n 65536
+ulimit -u 4096
+```
+
+Reboot to apply changes:
+```bash
+sudo reboot
+```
+**8. Access SonarQube Web Interface**
+
+Open in browser:
+```bash
+http://<SERVER_IP>:9000
+```
+
+Default login:
+
+- **Username**: `admin`
+
+- **Password**: `admin`
+
+On first login, you’ll be prompted to change the password.
 
