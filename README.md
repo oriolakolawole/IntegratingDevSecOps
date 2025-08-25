@@ -101,3 +101,53 @@ This will check your repository for any accidentally committed secrets.
 - Under Merge request approvals, check Prevent merges and set at least 1 approval.
 - Under Protect this branch, check Require pipelines to succeed before merging.
 - Now, GitLab will run the pipeline before merging, and Git Secrets will scan for sensitive data.
+
+---
+
+# Pre-Build Phase in DevSecOps  
+
+The **pre-build phase** in DevSecOps refers to the activities that take place before the code is built or compiled.  
+
+During this phase, **SAST (Static Application Security Testing) tools** such as **SonarQube**, **RIPS**, etc., are used to analyze source code for vulnerabilities early in the development lifecycle.  
+
+---
+
+## How to Create a Virtual Machine (Server) on GCP  
+
+1. In the **Google Cloud Console**, on the project selector page, select or create a project.  
+2. Enable the **Compute Engine API**.  
+3. In the console, click **Create an instance**.  
+4. Give your server a **name**.  
+5. Under machine configuration, choose:  
+   - **E2 Series**  
+   - **e2-medium** machine type  
+6. In the **Boot disk** section, click **Change**:  
+   - Disk size: **10GB**  
+   - OS: **Ubuntu** → **20.04 LTS**  
+7. Click **Select**.  
+8. In the **Firewall** section, select:  
+   - **Allow HTTP traffic**  
+   - **Allow HTTPS traffic**  
+9. Click **Create**.  
+10. Create firewall rules:  
+    - Navigate to **VPC Network → Firewall**.  
+11. Make ephemeral IP addresses static:  
+    - Navigate to **VPC Network → IP addresses**.  
+12. To connect to the VM:  
+    - Go to **VM Instances** page.  
+    - Click **SSH** in the row of the instance you want to connect to.  
+
+---
+
+## Jenkins  
+
+### How to Install Jenkins on Ubuntu Server  
+
+**Prerequisites:**  
+- A fresh Ubuntu installation  
+- A user with administrative privileges  
+
+**1. Update your system:**  
+```bash
+sudo apt-get update
+```
