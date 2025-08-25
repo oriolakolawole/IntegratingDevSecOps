@@ -523,7 +523,7 @@ sonarqube:
 
 - `http://your-sonarqube-url` → with your SonarQube instance URL
 
-6. Configure Pipeline Trigger
+**6. Configure Pipeline Trigger**
 
 - Go to your GitLab project → Settings → CI/CD.
 
@@ -778,3 +778,121 @@ sudo chown -R www-data:www-data /var/www/html
 sudo -Hu www-data git clone git@github.com:you/server.git /var/www/html
 ```
 Now your website auto-deploys from GitHub.
+
+## OWASP ZAP
+
+**OWASP ZAP (Zed Attack Proxy)** is a popular open-source web application security scanner. It can be used to find security vulnerabilities in web applications automatically.
+
+---
+
+### INTEGRATING OWASP ZAP INTO DEVSECOPS WORKFLOW
+
+1. **Install OWASP ZAP**  
+   The first step is to install OWASP ZAP on the system where it will be run. This can be done by downloading the appropriate version from the [official website](https://owasp.org/www-project-zap/) and following the installation instructions.
+
+2. **Configure OWASP ZAP**  
+   Once installed, configure OWASP ZAP to suit your needs. This can include setting up authentication, proxy settings, and scan policies. You can also create custom scripts to automate certain tasks, such as logging in to a website before scanning.
+
+3. **Integrate with the build process**  
+   Integrate OWASP ZAP into your build process by running a scan as part of the build pipeline. This can be done using tools such as Jenkins or Travis CI.  
+   Example: Create a Jenkins job that runs a scan on the application using OWASP ZAP before deploying it to the next environment.
+
+4. **Automate the scan**  
+   Automate the scan using the command-line interface of OWASP ZAP. This allows you to run scans as part of a script or continuous integration process.  
+   Example: Create a script that starts the scan and waits for it to complete before moving on to the next step in the pipeline.
+
+5. **Analyse the results**  
+   After completing the scan, analyse the results to identify vulnerabilities. The results can be exported in different formats, such as **XML**, **JSON**, and **HTML**.
+
+6. **Integrate with issue tracking system**  
+   Integrate the results of the scan with an issue tracking system, such as **JIRA**, so any identified vulnerabilities can be tracked and fixed.  
+   Export the results from OWASP ZAP in a format that can be imported into the issue tracking system.
+
+---
+
+### HOW TO ADD OWASP ZAP SCAN TO YOUR JENKINS PIPELINE
+
+#### How to run OWASP ZAP Docker Image
+
+**Requirements**
+You need Docker installed on your server.  
+👉 [Click here for Docker installation instructions](https://docs.docker.com/get-docker/)  
+
+You can install Docker image with OWASP ZAP pre-installed using the following command:
+```bash
+$ docker pull owasp/zap2docker-stable
+```
+Run ZAP in Headless Mode:
+```bash
+$ docker run -u zap -p 8080:8080 -i owasp/zap2docker-stable zap.sh -daemon -host 0.0.0.0 -port 8080
+```
+**Create SSH Login For Root User In Your ZAP Server**
+
+Edit the SSH configuration file:
+```bash
+# vi /etc/ssh/sshd_config
+```
+
+Change the following line:
+```bash
+PubKeyAuthentication no  =>  PubKeyAuthentication yes
+```
+
+Save and exit with:
+```bash
+:wq
+```
+**Create an SSH Key on Your ZAP Server**
+
+Generate a new key:
+```bash
+$ ssh-keygen
+```
+
+(Press Enter for all prompts.)
+
+Add your public key to authorized keys:
+```bash
+$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+```
+
+Copy your private key:
+```bash
+$ vi ~/.ssh/id_rsa
+```
+
+(Copy all the content.)
+
+**Adding ZAP to Your Jenkins Pipeline**
+
+1. In your Jenkins dashboard:
+- Go to Manage Jenkins
+- Go to Manage Plugins
+- Click on Available Plugins
+- Search for SSH Agent and install it.
+
+2. Add credentials in Jenkins:
+- Go to Manage Jenkins → Manage Credentials → Add Credentials
+- Fill the form as follows:
+ - Kind: SSH Username with private key
+ - Scope: Global (Jenkins, nodes, items, all child items, etc)
+ - ID: yourcredentialid
+ - Username: root
+ - Private key: Paste the private key you copied earlier
+ - Passphrase: Password of your root server
+ - Click Create
+
+3. Modify your Jenkinsfile in your repository by adding this stage:
+```groovy
+stage('OWASP ZAP ANALYSIS') {
+    sshagent (credentials: ['yourcredentialid']) {
+        sh '''
+        ssh -o StrictHostKeyChecking=no root@<yourzapserverip> \
+        "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://<yourwebserverip>/" || true
+        '''
+    }
+}
+```
+
+Save and commit changes to your repository.
+Jenkins will now run OWASP ZAP scan as part of your pipeline.
