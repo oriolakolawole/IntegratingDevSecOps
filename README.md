@@ -66,5 +66,38 @@ Run the following command to install Git Secrets:
 sudo make install   # For Linux and macOS
 ```
 For Windows:
+
 Run the provided `install.ps1` PowerShell script.
 This will copy the files to `%USERPROFILE%/.git-secrets` by default and add the directory to the PATH.
+
+### 2. Initialize Git Secrets
+
+Navigate to your local repository and run:
+```bash
+git secrets --install
+```
+
+This will add a .gitsecrets file to your repository.
+
+### 3. Add Secrets
+```bash
+git secrets --add <secret>
+```
+
+Run the above command for each secret you want to protect.
+
+### 4. Scan Repository
+```bash
+git secrets --scan
+```
+
+This will check your repository for any accidentally committed secrets.
+
+### 5. Integrate with GitLab
+
+- Go to your GitLab repository → Settings → Repository.
+- Scroll to Protected branches.
+- Select the branch you want to protect → click Protect.
+- Under Merge request approvals, check Prevent merges and set at least 1 approval.
+- Under Protect this branch, check Require pipelines to succeed before merging.
+- Now, GitLab will run the pipeline before merging, and Git Secrets will scan for sensitive data.
