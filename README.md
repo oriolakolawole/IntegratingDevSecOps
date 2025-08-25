@@ -104,7 +104,7 @@ This will check your repository for any accidentally committed secrets.
 
 ---
 
-# Pre-Build Phase in DevSecOps  
+# Pre-Build Phase   
 
 The **pre-build phase** in DevSecOps refers to the activities that take place before the code is built or compiled.  
 
@@ -233,7 +233,7 @@ If your repository is private:
   
 ---
 
-## SonarQube Setup Guide
+## SonarQube 
 
 SonarQube can be used to automatically scan code as part of a continuous integration or continuous delivery pipeline, ensuring that code quality issues are detected and addressed early in the development process.
 
@@ -420,4 +420,61 @@ Default login:
 - **Password**: `admin`
 
 On first login, you’ll be prompted to change the password.
+
+---
+
+### How to Integrate SonarQube with Jenkins
+
+ **1. Install the SonarQube Plugin**
+- In Jenkins, go to **Manage Jenkins → Manage Plugins → Available**  
+- Search for **SonarQube Scanner** and install it.
+
+**2. Configure the SonarQube Server in Jenkins**
+- Navigate to **Manage Jenkins → Configure System**  
+- Scroll to **SonarQube servers → Add SonarQube**  
+- Enter:
+  - A **name** for your server
+  - The **SonarQube URL**
+  - The **SonarQube access token**
+
+**3. Configure the SonarQube Scanner Tool**
+- Download & install **SonarQube Scanner** on your Jenkins server.  
+- In Jenkins, go to **Manage Jenkins → Global Tool Configuration**  
+- Add the SonarQube Scanner tool.
+
+**4. Create a SonarQube Project**
+- In the **SonarQube web interface**, create a new project.  
+- Generate a **project token** for authentication.
+
+**5. Configure the Jenkins Pipeline**
+1. Add a webhook to your GitHub repository:  
+```bash
+http://your_jenkins_ip:8080/github-webhook/
+```
+2. In your GitHub repo, create a file called **`Jenkinsfile`** with the following content:
+
+```groovy
+node {
+  stage('SCM') {
+    checkout scm
+  }
+  stage('SonarQube Analysis') {
+    def scannerHome = tool 'SonarScanner';
+    withSonarQubeEnv() {
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
+}
+```
+Make sure:
+-The SonarScanner tool name matches what you configured in Jenkins.
+-If multiple servers exist, specify the correct one in the script.
+
+**6. Run the Jenkins Pipeline**
+
+-Run the pipeline in Jenkins.
+
+-The code will be analyzed and results sent to SonarQube.
+
+-View detailed reports in the SonarQube web interface.
 
