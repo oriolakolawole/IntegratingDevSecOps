@@ -38,6 +38,29 @@ SonarLint helps analyze code inside **VS Code**. You can connect it either to a 
 
 ---
 
+# Version Control Phase
 
+The **version control phase** is an integral part of the DevSecOps workflow, enabling teams to track and manage changes to the codebase and easily revert to previous versions if necessary.
+It allows for the integration of **security testing and automated checks** within the version control system to ensure that vulnerabilities are identified and addressed as soon as they are introduced.
 
+---
 
+## Git Secret
+
+Git-secret is a command-line tool that allows you to store and manage secrets, such as passwords and private keys, in a Git repository.
+
+In GitLab, Git-secret can be integrated into a repository by adding a GitLab CI/CD pipeline that runs the git-secret command on each commit or merge request.
+If sensitive data is detected, the pipeline can be configured to fail the build or merge request, preventing the sensitive data from being committed.
+
+---
+
+## Integrating Git Secret with GitLab  
+
+### 1. Install Git Secrets  
+- Make sure **Git** is installed on your system.  
+- Download the latest version of Git Secrets from [GitHub](https://github.com/awslabs/git-secrets).  
+- Extract the downloaded archive and navigate to the extracted folder in the command line.  
+
+Run the following command to install Git Secrets:  
+```bash
+sudo make install   # For Linux and macOS
