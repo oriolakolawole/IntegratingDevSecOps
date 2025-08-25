@@ -622,7 +622,7 @@ Example output:
 ```bash
 PHP 8.1.2 (cli) (built: Mar  4 2022 18:13:46) (NTS)
 ```
-###Creating a Virtual Hos for your Website
+### Creating a Virtual Host for your Website
 
 Create directory:
 ```bash
@@ -670,7 +670,7 @@ nano /var/www/your_domain/index.html
 </html>
 ```
 
-###Testing PHP Processing on Your Web Server
+### Testing PHP Processing on Your Web Server
 Create PHP test file:
 ```bash
 nano /var/www/your_domain/info.php
@@ -896,3 +896,65 @@ stage('OWASP ZAP ANALYSIS') {
 
 Save and commit changes to your repository.
 Jenkins will now run OWASP ZAP scan as part of your pipeline.
+
+---
+
+## CONTAINER VULNERABILITY SCANNING WITH TRIVY
+
+### What is Trivy?
+**Trivy** is an open-source vulnerability scanner for container images and other software packages.  
+It helps developers and security teams identify vulnerabilities in their container images and dependencies, so they can remediate issues before exploitation.
+
+---
+
+### How to Integrate Trivy with Jenkins
+
+ **1. Install Trivy in your server**
+```bash
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install trivy
+```
+
+OR install with cURL:
+```bash
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3
+```
+**2. Verify installation**
+```bash
+trivy --version
+```
+**3. Install Jenkins Plugin**
+
+Install the HTML Publisher Plugin from Jenkins Plugin Manager.
+
+**4. Add Trivy Scan Stage to Jenkinsfile**
+```groovy
+stage('Scan') {
+    steps {
+        // Install trivy
+        sh 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3'
+        sh 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl > html.tpl'
+
+        // Scan all vuln levels and export HTML report
+        sh 'mkdir -p reports'
+        sh 'trivy filesystem --ignore-unfixed --vuln-type os,library --format template --template "@html.tpl" -o reports/nodejs-scan.html ./nodejs'
+
+        publishHTML target: [
+            allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'reports',
+            reportFiles: 'nodejs-scan.html',
+            reportName: 'Trivy Scan',
+            reportTitles: 'Trivy Scan'
+        ]
+
+        // Scan again and fail if CRITICAL vulnerabilities exist
+        sh 'trivy filesystem --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL ./nodejs'
+    }
+}
+```
+
