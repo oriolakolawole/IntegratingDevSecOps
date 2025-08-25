@@ -723,7 +723,6 @@ passwd
 ---
 
 ### How to Automatically Deploy your Website From Github
-HOW TO AUTOMATICALLY DEPLOY YOUR WEBSITE FROM GITHUB
 Prerequisites
 - Online remote repository (GitHub/Bitbucket)
 - Local git repo
@@ -761,13 +760,13 @@ sudo cat /var/www/.ssh/id_rsa.pub
 ```
 **On GitHub**
 1. Add SSH key to your GitHub account:
-   https://github.com/settings/ssh
-   Create a new key
-   Paste the deploy key you generated on the server
+- https://github.com/settings/ssh
+- Create a new key
+- Paste the deploy key you generated on the server
 
 2. Create webhook:
 Go to Settings > Webhooks
-Add:
+- Add:
 ```bash
 http://server.com/deploy.php
 ```
@@ -778,5 +777,4 @@ Clone repo:
 sudo chown -R www-data:www-data /var/www/html
 sudo -Hu www-data git clone git@github.com:you/server.git /var/www/html
 ```
-
-✅ Done! Now your website auto-deploys from GitHub.
+Now your website auto-deploys from GitHub.
