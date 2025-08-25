@@ -528,3 +528,20 @@ sonarqube:
 - Go to your GitLab project → Settings → CI/CD.
 
 - Configure the pipeline to run on every push event
+
+---
+
+# POST-BUILD PHASE
+
+The post-build phase in DevSecOps refers to the activities that occur after the application has been built and before it is deployed to production. This phase is critical for ensuring the application's security and typically focuses on testing and validation.
+
+---
+
+# HOW TO INSTALL APACHE, MYSQL, PHP ON UBUNTU SERVER
+
+## INSTALLING APACHE AND UPDATING FIREWALL
+
+Update package manager:
+
+```bash
+sudo apt update
