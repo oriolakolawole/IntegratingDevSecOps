@@ -467,14 +467,14 @@ node {
 }
 ```
 Make sure:
--The SonarScanner tool name matches what you configured in Jenkins.
--If multiple servers exist, specify the correct one in the script.
+- The SonarScanner tool name matches what you configured in Jenkins.
+- If multiple servers exist, specify the correct one in the script.
 
 **6. Run the Jenkins Pipeline**
 
--Run the pipeline in Jenkins.
+- Run the pipeline in Jenkins.
 
--The code will be analyzed and results sent to SonarQube.
+- The code will be analyzed and results sent to SonarQube.
 
--View detailed reports in the SonarQube web interface.
+- View detailed reports in the SonarQube web interface.
 
