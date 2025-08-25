@@ -1,3 +1,27 @@
+# DevSecOps Security Automation Project
+
+This project demonstrates the integration of **DevSecOps practices** into a modern software development lifecycle.  
+The goal is to ensure that **security is embedded at every stage of development** — from code commits, to testing, to deployment, and monitoring.  
+
+By combining tools such as **ArcherySec, Jira, OWASP ZAP, SonarQube, and Git-Secrets**, the project enables:  
+- **Automated security testing** of applications (SAST, DAST, SCA)  
+- **Centralized vulnerability management** via ArcherySec  
+- **Seamless issue tracking** and collaboration through Jira  
+- **Static code analysis** with SonarQube for detecting insecure code patterns  
+- **Secret scanning** using Git-Secrets to prevent sensitive information leaks  
+- **Continuous monitoring** of application security in the DevSecOps pipeline  
+
+This repository contains detailed documentation on how to:  
+- Connect **ArcherySec** with **Jira** for vulnerability tracking  
+- Integrate **ArcherySec** with **OWASP ZAP** for automated scans  
+- Set up **SonarQube** for static application security testing (SAST)  
+- Use **Git-Secrets** to prevent committing sensitive credentials  
+- Manage projects and issue tickets directly in **Jira**  
+- Apply DevSecOps best practices for secure software delivery  
+
+---
+
+
 # Development Phase
 
 The **development phase** in DevSecOps ensures that code is both **secure** and meets application requirements before deployment.  
