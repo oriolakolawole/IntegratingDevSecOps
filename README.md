@@ -478,3 +478,53 @@ Make sure:
 
 - View detailed reports in the SonarQube web interface.
 
+---
+
+### Connecting SonarQube with GitLab
+
+Integrating **SonarQube** with **GitLab** allows you to run code analysis on your GitLab repository and display the results in the SonarQube interface.
+
+**1. Set Up SonarQube**
+- Install SonarQube on your machine (download from [SonarQube](https://www.sonarqube.org/)) or use a hosted version.  
+
+
+**2. Create a Project in SonarQube**
+- Log into the SonarQube web interface.  
+- Click **"Create Project"** and follow the setup steps.  
+
+
+**3. Generate a Token**
+- In the SonarQube web interface, go to **Security** → **Generate Token**.  
+- Save the token securely, you’ll need it for integration.  
+
+
+**4. Integrate SonarQube with GitLab**
+- Go to your GitLab project → **Settings** → **Integrations**.  
+- Add the **SonarQube service**.  
+- Enter:
+  - **SonarQube URL**
+  - **Generated token**
+
+**5. Create GitLab CI/CD Pipeline**
+In your GitLab repository, create a new file named **`.gitlab-ci.yml`** with the following content:
+
+```yaml
+sonarqube:
+  image: sonarqube:7.9-community
+  script:
+    - sonar-scanner
+  variables:
+    SONAR_TOKEN: "YOUR_TOKEN"
+    SONAR_HOST_URL: "http://your-sonarqube-url"
+```
+➡️ Replace:
+
+- `YOUR_TOKEN` → with your SonarQube token
+
+- `http://your-sonarqube-url` → with your SonarQube instance URL
+
+6. Configure Pipeline Trigger
+
+- Go to your GitLab project → Settings → CI/CD.
+
+- Configure the pipeline to run on every push event
