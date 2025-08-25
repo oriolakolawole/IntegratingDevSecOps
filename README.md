@@ -537,11 +537,242 @@ The post-build phase in DevSecOps refers to the activities that occur after the 
 
 ---
 
-# HOW TO INSTALL APACHE, MYSQL, PHP ON UBUNTU SERVER
+## HOW TO INSTALL APACHE, MYSQL, PHP ON UBUNTU SERVER
 
-## INSTALLING APACHE AND UPDATING FIREWALL
+### INSTALLING APACHE AND UPDATING FIREWALL
 
 Update package manager:
 
 ```bash
 sudo apt update
+```
+Install Apache:
+```bash
+sudo apt install apache2
+```
+
+Adjust your firewall settings to allow HTTP traffic:
+```bash
+sudo ufw allow in "Apache"
+sudo ufw status
+```
+
+Verify by visiting your server’s public IP in a browser:
+```bash
+http://your_server_ip
+```
+👉 You should see Apache2 default page.
+
+INSTALLING MYSQL
+
+Install MySQL:
+```bash
+sudo apt install mysql-server
+```
+
+Run security script:
+```bash
+sudo mysql_secure_installation
+```
+
+If you see error like:
+```bash
+Failed! Error: SET PASSWORD has no significance...
+```
+
+Run:
+```bash
+sudo mysql
+```
+
+Inside MySQL:
+```bash
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+exit
+```
+
+Then rerun:
+```bash
+sudo mysql_secure_installation
+```
+
+Test login:
+```bash
+sudo mysql
+# OR
+mysql -u root -p
+```
+
+Exit:
+```bash
+exit
+```
+INSTALLING PHP
+
+Install PHP:
+```bash
+sudo apt install php libapache2-mod-php php-mysql
+```
+
+Check PHP version:
+```bash
+php -v
+```
+
+Example output:
+```bash
+PHP 8.1.2 (cli) (built: Mar  4 2022 18:13:46) (NTS)
+```
+CREATING A VIRTUAL HOST FOR YOUR WEBSITE
+
+Create directory:
+```bash
+sudo mkdir /var/www/your_domain
+sudo chown -R $USER:$USER /var/www/your_domain
+```
+
+Create config file:
+```bash
+sudo nano /etc/apache2/sites-available/your_domain.conf
+```
+
+Paste config:
+```bash
+<VirtualHost *:80>
+    ServerName your_domain
+    ServerAlias www.your_domain 
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/your_domain
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+Enable site:
+```bash
+sudo a2ensite your_domain
+sudo a2dissite 000-default
+sudo apache2ctl configtest
+sudo systemctl reload apache2
+```
+
+Create test HTML:
+```bash
+nano /var/www/your_domain/index.html
+
+<html>
+  <head>
+    <title>your_domain website</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    <p>This is the landing page of <strong>your_domain</strong>.</p>
+  </body>
+</html>
+```
+TESTING PHP PROCESSING ON YOUR WEB SERVER
+
+Create PHP test file:
+```bash
+nano /var/www/your_domain/info.php
+```
+
+Paste:
+```bash
+<?php
+phpinfo();
+```
+
+Access:
+```bash
+http://server_domain_or_IP/info.php
+```
+
+Remove after test:
+```bash
+sudo rm /var/www/your_domain/info.php
+```
+CREATING SSH LOGIN FOR ROOT USER
+
+Switch to root:
+```bash
+sudo su
+```
+
+Edit sshd config:
+```bash
+vi /etc/ssh/sshd_config
+```
+
+
+Update:
+```bash
+PasswordAuthentication yes
+PermitRootLogin yes
+```
+
+Save and restart SSH:
+```bash
+systemctl restart sshd
+```
+Set root password:
+```bash
+passwd
+```
+HOW TO AUTOMATICALLY DEPLOY YOUR WEBSITE FROM GITHUB
+Prerequisites
+- Online remote repository (GitHub/Bitbucket)
+- Local git repo
+- Cloud server (AWS, GCP, Rackspace, etc.)
+- Apache with `/var/www/html/`
+
+On Local Machine
+
+Add deployment script:
+```bash
+git add deploy.php
+git commit -m 'Added the git deployment script'
+git push -u origin master
+```
+
+On Your Server
+
+Install Git and check version:
+```bash
+git --version
+```
+
+Setup Git:
+```bash
+git config --global user.name "Server"
+git config --global user.email "server@server.com"
+```
+
+Setup SSH for Apache:
+```bash
+sudo mkdir /var/www/.ssh
+sudo chown -R apache:apache /var/www/.ssh/
+sudo -Hu apache ssh-keygen -t rsa
+sudo cat /var/www/.ssh/id_rsa.pub
+```
+On GitHub
+1. Add SSH key to your GitHub account:
+   https://github.com/settings/ssh
+   Create a new key
+   Paste the deploy key you generated on the server
+
+2. Create webhook:
+Go to Settings > Webhooks
+Add:
+```bash
+http://server.com/deploy.php
+```
+On the Server
+
+Clone repo:
+```bash
+sudo chown -R www-data:www-data /var/www/html
+sudo -Hu www-data git clone git@github.com:you/server.git /var/www/html
+```
+
+✅ Done! Now your website auto-deploys from GitHub.
