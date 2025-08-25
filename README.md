@@ -38,4 +38,6 @@ SonarLint helps analyze code inside **VS Code**. You can connect it either to a 
 
 ---
 
-✅ With SonarLint, you get **real-time code analysis** inside VS Code, making it easier to catch and fix issues early in development.
+
+
+
