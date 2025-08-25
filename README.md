@@ -182,19 +182,51 @@ sudo systemctl status jenkins
 
 **7. Access Jenkins:**
 
-Open a browser → http://<your-server-ip>:8080
+-Open a browser → http://<your-server-ip>:8080
 
-Complete the setup:
-
-Unlock Jenkins with admin password
-
-Install suggested plugins
-
-Configure security
+- Complete the setup:  
+  - Unlock Jenkins with admin password
+  - Install suggested plugins
+  - Configure security
 
 **8. Secure Jenkins with Firewall (UFW):**
-
+```bash
 sudo ufw allow 8080
-
-
+```
 By default Jenkins runs on port 8080.
+
+### How to Create a Pipeline in Jenkins with GitHub Integration  
+
+**1. Install Necessary Plugins**  
+Go to **Manage Jenkins → Manage Plugins → Available** and install:  
+- **Pipeline** plugin  
+- **GitHub** plugin  
+- **Strict Crumb Issuer** plugin  
+
+**2. Create a New Pipeline Project**  
+- Click **New Item**  
+- Select **Pipeline**  
+- Enter project name → Click **OK**  
+
+**3. Configure the Pipeline** 
+- Scroll to the **Pipeline** section  
+- Select **Pipeline script from SCM**  
+- Choose **Git** as SCM  
+- Enter your **GitHub repository URL**  
+- (Optional) Specify the branch  
+
+**4. Add GitHub Credentials**  
+If your repository is private:  
+- Go to **Credentials → Add**  
+- Enter GitHub **username & token/password**  
+
+**5. Save Pipeline Configuration**  
+
+
+**6. Run the Pipeline** 
+- On the project page → Click **Build Now**  
+- Jenkins will automatically:  
+  - Fetch code from GitHub  
+  - Run the defined pipeline steps
+  
+
