@@ -957,4 +957,101 @@ stage('Scan') {
     }
 }
 ```
+---
+# Monitoring and Reporting Phase
+
+## ARCHERYSEC
+
+ArcherySec provides a centralized platform for identifying, tracking, and managing vulnerabilities across an organization's entire infrastructure.  
+It can be integrated with popular issue tracking and collaboration tools such as **JIRA** and **Slack**, enabling security teams to quickly identify and remediate vulnerabilities.
+
+---
+
+### How to Install ArcherySec on a Server
+
+```bash
+$ git clone https://github.com/archerysec/archerysec.git
+$ cd archerysec
+$ NAME=User EMAIL=user@user.com PASSWORD=admin@123A bash setup.sh
+$ ./run.sh
+```
+Once installed, navigate to:
+👉 `http://<your_ip_address>:8000`
+
+---
+### How to Connect ArcherySec to Jira
+
+1. Open your ArcherySec dashboard and navigate to the **Settings** menu.  
+2. Click on **Integrations** in the dropdown menu and then click on the **Add** button next to **Jira** integration.  
+3. In the **Add Integration** modal, enter the following information:  
+   - **Name**: Give a name to the Jira integration.  
+   - **Base URL**: Enter the base URL of your Jira instance.  
+   - **Username**: Enter your Jira username.  
+   - **Password**: Enter your Jira API token or password.  
+4. Click on the **Test Connection** button to verify the connection to your Jira instance.  
+5. Once the connection is successful, click on the **Save** button to save the Jira integration settings.  
+6. Navigate to the **Projects** menu and select the project for which you want to create a Jira issue.  
+7. In the project dashboard, click on the **Issues** tab and then click on the **Create Issue** button.  
+8. In the **Create Issue** modal, fill in the necessary details of the issue, such as the summary, description, and issue type.  
+9. In the **Details** section, select the **Jira** integration from the **Integration** dropdown menu.  
+10. Fill in the relevant fields for the Jira issue, such as the project, assignee, and priority.  
+11. Click on the **Create Issue** button to create the Jira issue.  
+12. You can now view the Jira issue details in the **Issues** tab of your ArcherySec project dashboard.  
+
+---
+
+### How to Connect ArcherySec to OWASP ZAP
+
+1. Open your ArcherySec dashboard and navigate to the **Settings** menu.  
+2. Click on **Integrations** in the dropdown menu and then click on the **Add** button next to **ZAP** integration.  
+3. In the **Add Integration** modal, enter the following information:  
+   - **Name**: Give a name to the ZAP integration.  
+   - **Base URL**: Enter the base URL of your ZAP instance.  
+   - **API Key**: Enter the API key for your ZAP instance.  
+4. Click on the **Test Connection** button to verify the connection to your ZAP instance.  
+5. Once the connection is successful, click on the **Save** button to save the ZAP integration settings.  
+6. Open your OWASP ZAP application and navigate to the **Tools** menu.  
+7. Click on **Options** in the dropdown menu and then click on the **API** tab.  
+8. In the **API** tab, enable the following options:  
+   - **Enable API**: Check this box to enable the ZAP API.  
+   - **Allow remote clients to connect**: Check this box to allow ArcherySec to connect to the ZAP API.  
+9. Click on the **Save** button to save the API settings.  
+10. Navigate to the **Projects** menu in your ArcherySec dashboard and select the project for which you want to scan with ZAP.  
+11. In the project dashboard, click on the **Scan** tab and then click on the **Add Scan** button.  
+12. In the **Add Scan** modal, select **ZAP** as the scanner and enter the necessary details, such as the target URL and scan options.  
+13. Click on the **Save** button to save the scan settings.  
+14. Click on the **Start Scan** button to start the ZAP scan.  
+15. Once the scan is complete, you can view the results in the **Issues** tab of your project dashboard.
+
+## JIRA
+
+Jira is a popular project management and issue tracking software developed by Atlassian. It is designed to help teams of all sizes manage their projects and track their progress through various stages of development.
+
+
+
+### HOW TO CREATE A PROJECT AND ISSUE TICKETS IN JIRA
+
+**Creating a Project**
+1. Log in to your Jira account and navigate to the Jira dashboard.  
+2. Click on the **"Create project"** button located in the left sidebar of the dashboard.  
+3. On the "Create Project" page, select the project type you want to create (e.g., Scrum, Kanban, etc.).  
+4. Enter the project details such as **project name, project key, project lead, and project description**.  
+5. Select the appropriate project template (if available) or leave it as **None**.  
+6. Click on the **"Create"** button to create your project.  
+
+
+**Creating an Issue**
+1. Once you have created your project, navigate to the project page by clicking on the project name from the Jira dashboard.  
+2. Click on the **"Create"** button located in the left sidebar of the project page.  
+3. On the "Create Issue" page, select the issue type you want to create (e.g., **Bug, Task, Story**, etc.).  
+4. Enter the issue details such as **summary, description, priority, and assignee**.  
+5. Add any additional details you want, such as **attachments or comments**.  
+6. Click on the **"Create"** button to create your issue.  
+
+**Assigning an Issue**
+1. Once you have created your issue, it will be added to the project backlog or board depending on the project type you have created.  
+2. To assign an issue to someone, open the issue by clicking on the **issue key**.  
+3. Click on the **"Assign"** button located in the issue details section.  
+4. Select the user you want to assign the issue to from the list of available users.  
+5. Click on the **"Assign"** button to assign the issue to the selected user.  
 
