@@ -531,15 +531,14 @@ sonarqube:
 
 ---
 
-# POST-BUILD PHASE
+# Post Build Phase
 
 The post-build phase in DevSecOps refers to the activities that occur after the application has been built and before it is deployed to production. This phase is critical for ensuring the application's security and typically focuses on testing and validation.
 
 ---
 
-## HOW TO INSTALL APACHE, MYSQL, PHP ON UBUNTU SERVER
-
-### INSTALLING APACHE AND UPDATING FIREWALL
+## How to install Apache, Mysql, PHP on Ubuntu Server
+### Installing Apache and Updating Firewall
 
 Update package manager:
 
@@ -563,7 +562,7 @@ http://your_server_ip
 ```
 👉 You should see Apache2 default page.
 
-INSTALLING MYSQL
+### Installing Mysql
 
 Install MySQL:
 ```bash
@@ -607,7 +606,7 @@ Exit:
 ```bash
 exit
 ```
-INSTALLING PHP
+### Installing PHP
 
 Install PHP:
 ```bash
@@ -623,7 +622,7 @@ Example output:
 ```bash
 PHP 8.1.2 (cli) (built: Mar  4 2022 18:13:46) (NTS)
 ```
-CREATING A VIRTUAL HOST FOR YOUR WEBSITE
+###Creating a Virtual Hos for your Website
 
 Create directory:
 ```bash
@@ -670,8 +669,8 @@ nano /var/www/your_domain/index.html
   </body>
 </html>
 ```
-TESTING PHP PROCESSING ON YOUR WEB SERVER
 
+###Testing PHP Processing on Your Web Server
 Create PHP test file:
 ```bash
 nano /var/www/your_domain/info.php
@@ -692,7 +691,9 @@ Remove after test:
 ```bash
 sudo rm /var/www/your_domain/info.php
 ```
-CREATING SSH LOGIN FOR ROOT USER
+---
+
+### Creating SSH Login for Root User
 
 Switch to root:
 ```bash
@@ -719,6 +720,9 @@ Set root password:
 ```bash
 passwd
 ```
+---
+
+### How to Automatically Deploy your Website From Github
 HOW TO AUTOMATICALLY DEPLOY YOUR WEBSITE FROM GITHUB
 Prerequisites
 - Online remote repository (GitHub/Bitbucket)
@@ -726,7 +730,7 @@ Prerequisites
 - Cloud server (AWS, GCP, Rackspace, etc.)
 - Apache with `/var/www/html/`
 
-On Local Machine
+**On Local Machine**
 
 Add deployment script:
 ```bash
@@ -735,7 +739,7 @@ git commit -m 'Added the git deployment script'
 git push -u origin master
 ```
 
-On Your Server
+**On Your Server**
 
 Install Git and check version:
 ```bash
@@ -755,7 +759,7 @@ sudo chown -R apache:apache /var/www/.ssh/
 sudo -Hu apache ssh-keygen -t rsa
 sudo cat /var/www/.ssh/id_rsa.pub
 ```
-On GitHub
+**On GitHub**
 1. Add SSH key to your GitHub account:
    https://github.com/settings/ssh
    Create a new key
@@ -767,7 +771,7 @@ Add:
 ```bash
 http://server.com/deploy.php
 ```
-On the Server
+**On the Server**
 
 Clone repo:
 ```bash
